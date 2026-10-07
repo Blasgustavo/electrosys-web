@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer Circle -->
+  <circle cx="40" cy="40" r="36" fill="none" stroke="url(#logoGradient)" stroke-width="3" opacity="0.3"/>
+
+  <!-- Inner Circle with Gradient -->
+  <circle cx="40" cy="40" r="28" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
+
+  <!-- Checkmark Path -->
+  <path d="M25 42 L35 52 L55 30"
+        fill="none"
+        stroke="url(#logoGradient)"
+        stroke-width="5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+</svg>

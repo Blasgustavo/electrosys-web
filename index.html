@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ElectroSys - Gestión Integral de Operaciones de Campo. Controla cuadrillas, tareas y recursos en tiempo real.">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="robots" content="index, follow">
+    <title>ElectroSys - Gestión Integral de Operaciones de Campo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* ===================================
+           Landing Page Specific Styles
+           =================================== */
+
+        /* Background Gradient Effect */
+        .landing-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background-image: url('assets/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .landing-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.70) 100%),
+                radial-gradient(ellipse at 30% 70%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
+        }
+
+        /* Navigation Cards - Top Bar */
+        .nav-cards {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            padding: var(--space-lg) 0;
+            margin-bottom: var(--space-xl);
+        }
+
+        .nav-card {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            text-decoration: none;
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all var(--transition-base);
+        }
+
+        .nav-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--color-text-primary);
+        }
+
+        .nav-card--privacy:hover { border-color: var(--color-privacy); color: var(--color-privacy); }
+        .nav-card--docs:hover { border-color: var(--color-docs); color: var(--color-docs); }
+        .nav-card--other:hover { border-color: var(--color-other); color: var(--color-other); }
+
+        .nav-card svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Hero Section */
+        .hero-landing {
+            text-align: center;
+            padding: var(--space-2xl) 0 4rem;
+        }
+
+        .hero-logo {
+            margin-bottom: var(--space-xl);
+        }
+
+        .hero-logo img {
+            width: 100px;
+            height: 100px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.03em;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.01em;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            max-width: 650px;
+            margin: 0 auto var(--space-2xl);
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius-xl);
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition-base);
+            min-width: 180px;
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn--primary {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn--secondary {
+            background: transparent;
+            color: var(--color-text-primary);
+            border: 2px solid var(--glass-border);
+        }
+
+        .btn--secondary:hover {
+            border-color: var(--color-secondary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .btn--whatsapp {
+            background: #22c55e;
+            color: white;
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+            min-width: 280px;
+            padding: var(--space-lg) var(--space-xl);
+            font-size: 1.125rem;
+        }
+
+        .btn--whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5);
+            background: #16a34a;
+        }
+
+        /* Section Common Styles */
+        .section {
+            padding: var(--space-2xl) 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: var(--space-2xl) 0;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto var(--space-2xl);
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 1.0625rem;
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            margin-bottom: var(--space-lg);
+        }
+
+        .about-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Benefits Grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .benefit-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all var(--transition-base);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .benefit-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            border-radius: var(--radius-xl);
+            color: var(--color-secondary);
+        }
+
+        .benefit-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .benefit-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .benefit-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all var(--transition-base);
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border-radius: var(--radius-lg);
+            color: var(--color-secondary);
+        }
+
+        .feature-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Screenshots Section */
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .screenshot-card {
+            aspect-ratio: 16 / 10;
+            background: var(--glass-bg);
+            border: 2px dashed var(--glass-border);
+            border-radius: var(--radius-2xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            color: var(--color-text-secondary);
+            transition: all var(--transition-base);
+        }
+
+        .screenshot-card:hover {
+            border-color: var(--color-secondary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .screenshot-card svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.5;
+        }
+
+        .screenshot-card span {
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            margin: var(--space-2xl) 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+
+        .contact-item svg {
+            width: 24px;
+            height: 24px;
+            color: var(--color-secondary);
+        }
+
+        .contact-item a {
+            color: var(--color-text-primary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .contact-item a:hover {
+            color: var(--color-secondary);
+        }
+
+        /* Footer */
+        .footer-landing {
+            border-top: 1px solid var(--glass-border);
+            padding: var(--space-xl) 0;
+            margin-top: var(--space-2xl);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .footer-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color var(--transition-fast);
+        }
+
+        .footer-links a:hover {
+            color: var(--color-secondary);
+        }
+
+        .footer-copyright {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            margin: var(--space-2xl) 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-cards {
+                flex-wrap: wrap;
+            }
+
+            .hero-landing {
+                padding: var(--space-xl) 0 3rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screenshots-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effect -->
+    <div class="landing-bg"></div>
+
+    <!-- Navigation Cards -->
+    <nav class="container">
+        <div class="nav-cards">
+            <a href="privacy.html" class="nav-card nav-card--privacy">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                </svg>
+                Privacidad
+            </a>
+            <a href="docs.html" class="nav-card nav-card--docs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                Documentación
+            </a>
+            <a href="other.html" class="nav-card nav-card--other">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4"/>
+                    <path d="M12 8h.01"/>
+                </svg>
+                Otros
+            </a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- HERO SECTION -->
+        <section class="hero-landing">
+            <div class="hero-logo">
+                <img src="assets/logo.png" alt="ElectroSys Logo" width="100" height="100">
+            </div>
+            <h1 class="hero-title">ElectroSys</h1>
+            <p class="hero-subtitle">Gestión Integral de Operaciones de Campo</p>
+            <p class="hero-description">
+                Optimiza la productividad de tu equipo de campo con tecnología de vanguardia. 
+                Controla cuadrillas, tareas y recursos en tiempo real.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contacto" class="btn btn--primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                    </svg>
+                    Solicitar Demo
+                </a>
+                <a href="#caracteristicas" class="btn btn--secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="10 8 16 12 10 16 10 8"/>
+                    </svg>
+                    Conocer Más
+                </a>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SOBRE EL SISTEMA -->
+        <section class="about-section" id="sobre">
+            <div class="section-header">
+                <h2 class="section-title">¿Qué es ElectroSys?</h2>
+            </div>
+            <div class="about-content">
+                <p>
+                    ElectroSys es una plataforma integral de gestión de operaciones de campo diseñada específicamente 
+                    para empresas de servicios eléctricos. Nuestro sistema permite coordinar equipos de trabajo, 
+                    planificar tareas y monitorear operaciones en tiempo real desde cualquier ubicación.
+                </p>
+                <p>
+                    Con una arquitectura moderna basada en tecnología híbrida, ElectroSys ofrece una experiencia 
+                    fluida tanto en escritorio como en dispositivos móviles. La sincronización offline garantiza 
+                    que tus técnicos puedan trabajar sin interrupciones incluso en zonas con poca conectividad.
+                </p>
+                <p>
+                    Diseñado para escalar con tu negocio, ElectroSys proporciona las herramientas necesarias 
+                    para aumentar la eficiencia operativa, reducir costos y mejorar la calidad del servicio 
+                    que ofreces a tus clientes.
+                </p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">Eficiencia Operativa</h3>
+                    <p class="benefit-description">Optimiza recursos y reduce tiempos muertos con planificación inteligente</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">Control en Tiempo Real</h3>
+                    <p class="benefit-description">Monitorea operaciones y toma decisiones informadas al instante</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">Reducción de Costos</h3>
+                    <p class="benefit-description">Minimiza gastos operativos y optimiza el uso de recursos disponibles</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20V10"/>
+                            <path d="M18 20V4"/>
+                            <path d="M6 20v-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">Productividad Mejorada</h3>
+                    <p class="benefit-description">Potencia el rendimiento de tu equipo con herramientas intuitivas</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- CARACTERÍSTICAS -->
+        <section class="section" id="caracteristicas">
+            <div class="section-header">
+                <h2 class="section-title">Características Principales</h2>
+                <p class="section-subtitle">Herramientas completas para gestionar cada aspecto de tus operaciones de campo</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Gestión de Cuadrillas</h3>
+                        <p class="feature-description">Asigna y controla equipos de trabajo de manera eficiente. Organiza miembros, asigna roles y sigue su rendimiento.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                            <path d="M8 14h.01"/>
+                            <path d="M12 14h.01"/>
+                            <path d="M16 14h.01"/>
+                            <path d="M8 18h.01"/>
+                            <path d="M12 18h.01"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Planificación de Tareas</h3>
+                        <p class="feature-description">Organiza y programa operaciones con calendarios visuales. Define prioridades, vencimientos y dependencias.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Seguimiento GPS</h3>
+                        <p class="feature-description">Monitoreo en tiempo real de ubicaciones. Visualiza tu flota y optimiza rutas de desplazamiento.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                            <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Reportes y Analytics</h3>
+                        <p class="feature-description">Dashboard con métricas detalladas. Genera informes de rendimiento, productividad y costos.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                            <line x1="12" y1="18" x2="12.01" y2="18"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">App Móvil</h3>
+                        <p class="feature-description">Tecnología híbrida para campo. Interfaz optimizada para técnicos en movimiento.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v4"/>
+                            <path d="m16.24 7.76 2.83-2.83"/>
+                            <path d="M22 12h-4"/>
+                            <path d="m16.24 16.24 2.83 2.83"/>
+                            <path d="M12 22v-4"/>
+                            <path d="m7.76 16.24-2.83 2.83"/>
+                            <path d="M2 12h4"/>
+                            <path d="m7.76 7.76-2.83-2.83"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Sincronización Offline</h3>
+                        <p class="feature-description">Funciona sin internet. Los técnicos registran datos que se sincronizan cuando hay conectividad.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- CAPTURAS -->
+        <section class="section" id="capturas">
+            <div class="section-header">
+                <h2 class="section-title">Capturas del Sistema</h2>
+                <p class="section-subtitle">Explora la interfaz intuitiva de ElectroSys</p>
+            </div>
+
+            <div class="screenshots-grid">
+                <div class="screenshot-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="9" cy="9" r="2"/>
+                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                    </svg>
+                    <span>Captura próximamente</span>
+                </div>
+                <div class="screenshot-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="9" cy="9" r="2"/>
+                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                    </svg>
+                    <span>Captura próximamente</span>
+                </div>
+                <div class="screenshot-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="9" cy="9" r="2"/>
+                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                    </svg>
+                    <span>Captura próximamente</span>
+                </div>
+                <div class="screenshot-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="9" cy="9" r="2"/>
+                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                    </svg>
+                    <span>Captura próximamente</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- CONTACTO -->
+        <section class="section contact-section" id="contacto">
+            <div class="section-header">
+                <h2 class="section-title">Contáctanos</h2>
+                <p class="section-subtitle">¿Listo para transformar tu operación de campo?</p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <a href="https://wa.me/51957149996" target="_blank">+51 957 149 996</a>
+                    </div>
+                    <div class="contact-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <a href="mailto:blasgn24@gmail.com">blasgn24@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        <span>Juliaca, Puno, Perú</span>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/51957149996" target="_blank" class="btn btn--whatsapp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    Escríbenos por WhatsApp
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer-landing">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacidad</a>
+                    <a href="docs.html">Documentación</a>
+                    <a href="other.html">Otros</a>
+                </div>
+                <p class="footer-copyright">© 2026 ElectroSys. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
